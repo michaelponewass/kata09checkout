@@ -1,12 +1,12 @@
 package mp.kata09checkout;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
+ *
  * Created by michael.ponewass on 22.03.2018.
+ *
  */
 public class Checkout {
     private Map<Item, Integer> checkoutItems = new HashMap<>();
@@ -29,11 +29,10 @@ public class Checkout {
     public double getTotal() {
         double total=0;
         for (Map.Entry<Item, Integer> entry : checkoutItems.entrySet()) {
-            if (this.priceRules.containsKey(entry.getKey())) {
-                PriceRule rule = this.priceRules.get(entry.getKey());
-                entry.getValue().setPriceRule(rule);
-            }
-            total += entry.getTotal(entry.getValue());
+            Item item = entry.getKey();
+            int amount = entry.getValue();
+            PriceRule rule = this.priceRules.get(item);
+            total += rule.getTotal(amount);
         }
         return total;
     }

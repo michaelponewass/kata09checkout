@@ -6,6 +6,8 @@ package mp.kata09checkout;
 public class Item {
     private String sku;
     private double price;
+    private PriceRule priceRule;
+
     public Item(String sku, double price) {
         this.sku = sku;
         this.price = price;
