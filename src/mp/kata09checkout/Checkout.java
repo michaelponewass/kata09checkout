@@ -17,6 +17,7 @@ public class Checkout {
         this.priceRules = priceRules;
 
     }
+
     public void scan(Item item) {
         int itemCounter = 0;
         if (checkoutItems.containsKey(item)) {
@@ -26,13 +27,25 @@ public class Checkout {
         checkoutItems.put(item, itemCounter);
     }
 
+    /**
+     * Calculates the total price of checkout
+     *
+     * @return double total price
+     *
+     */
     public double getTotal() {
         double total=0;
         for (Map.Entry<Item, Integer> entry : checkoutItems.entrySet()) {
             Item item = entry.getKey();
             int amount = entry.getValue();
+            int amountNormalPrice=amount;
+
             PriceRule rule = this.priceRules.get(item);
-            total += rule.getTotal(amount);
+            if (rule != null) {
+                amountNormalPrice= amount % rule.getAmount() ;
+                total += (amount-amountNormalPrice) / rule.getAmount() * rule.getSpecialPrice();
+            }
+            total += amountNormalPrice*item.getPrice();
         }
         return total;
     }
