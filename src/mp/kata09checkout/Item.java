@@ -12,6 +12,9 @@ public class Item {
         this.price = price;
     }
 
+    /**
+     * @return get price of item
+     */
     public double getPrice() {
         return price;
     }

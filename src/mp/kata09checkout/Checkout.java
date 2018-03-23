@@ -4,20 +4,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
  * Created by michael.ponewass on 22.03.2018.
- *
  */
 public class Checkout {
-    private Map<Item, Integer> checkoutItems = new HashMap<>();
-
+    /* store for checkout items */
+    private Map<Item, Integer> checkoutItems;
+    /* price rule holder */
     private Map<Item, PriceRule> priceRules;
 
     public Checkout(Map<Item, PriceRule> priceRules) {
         this.priceRules = priceRules;
+        this.checkoutItems = new HashMap<>();
 
     }
 
+    /**
+     * store the items for checkout
+     *
+     * @param item the item to calculate
+     */
     public void scan(Item item) {
         int itemCounter = 0;
         if (checkoutItems.containsKey(item)) {
@@ -30,22 +35,18 @@ public class Checkout {
     /**
      * Calculates the total price of checkout
      *
-     * @return double total price
-     *
+     * @return total price
      */
     public double getTotal() {
-        double total=0;
+        double total = 0;
         for (Map.Entry<Item, Integer> entry : checkoutItems.entrySet()) {
             Item item = entry.getKey();
             int amount = entry.getValue();
-            int amountNormalPrice=amount;
-
             PriceRule rule = this.priceRules.get(item);
-            if (rule != null) {
-                amountNormalPrice= amount % rule.getAmount() ;
-                total += (amount-amountNormalPrice) / rule.getAmount() * rule.getSpecialPrice();
+            if (rule == null) {
+                rule = new PriceRuleDefault();
             }
-            total += amountNormalPrice*item.getPrice();
+            total += rule.getTotal(amount, item.getPrice());
         }
         return total;
     }
